@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recipe QR Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f9;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 50px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        /* QR card container */
+        .recipe-box {
+            margin-top: 30px;
+            text-align: center;
+            padding: 20px;
+            background-color: white;
+            border: 3px solid #2c3e50; /* dark border */
+            border-radius: 15px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+            display: inline-block;
+        }
+
+        #recipeName {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        #qrImage {
+            width: 250px;
+            height: 250px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Recipe QR Generator</h1>
+    <button onclick="generateQR()">Generate QR</button>
+
+    <div class="recipe-box" id="recipeBox" style="display:none;">
+        <div id="recipeName"></div>
+        <img id="qrImage" alt="QR Code will appear here" />
+    </div>
+
+    <script>
+        async function generateQR() {
+            try {
+                const response = await fetch("http://127.0.0.1:8000/recipe_qr", {
+                    headers: {
+                        "X-API-KEY": "TEAMKEY1"
+                    }
+                });
+
+                if (!response.ok) {
+                    alert("Failed to fetch QR code. Check your API key or server.");
+                    return;
+                }
+
+                const data = await response.json();
+
+                // Show recipe box
+                const recipeBox = document.getElementById("recipeBox");
+                recipeBox.style.display = "block";
+
+                // Show only recipe name
+                document.getElementById("recipeName").innerText = data.recipe_name;
+
+                // Show QR code
+                document.getElementById("qrImage").src = "data:image/png;base64," + data.qr_code_base64;
+
+            } catch (error) {
+                alert("Error fetching QR code: " + error);
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
