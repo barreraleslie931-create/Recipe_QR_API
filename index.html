@@ -70,7 +70,7 @@
     <script>
         async function generateQR() {
             try {
-                const response = await fetch("http://127.0.0.1:8000/recipe_qr", {
+                const response = await fetch("http://192.168.1.22:8000/recipe_qr", { // ← UPDATED IP
                     headers: {
                         "X-API-KEY": "TEAMKEY1"
                     }
