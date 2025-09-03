@@ -6,7 +6,12 @@ import os
 import base64
 from io import BytesIO
 from fastapi.middleware.cors import CORSMiddleware
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # allows all devices for testing
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # Create FastAPI app
 app = FastAPI(title="Recipe QR Generator API")
 
